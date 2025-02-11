@@ -6,6 +6,7 @@ import {hello} from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
 //the below line is a short cut for an  import statement and is called as "Default Export"
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import {deliveryOptions} from '../products-data/deliveryOptions.js';
+
 hello();
 
 
@@ -31,11 +32,29 @@ cart.forEach((cartItem) => {
 
   //console.log(matchingProduct);
 
+  const deliveryOptionId = cartItem.deliveryOptionId;
+
+  let deliveryOption = 0;
+
+   deliveryOptions.forEach((option) => {
+    if(option.id === deliveryOptionId) {
+      deliveryOption = option;
+      deliveryOption;
+    }
+   });
+
+   const today = dayjs();
+      const deliveryDate = today.add(
+        deliveryOption.deliveryDays,
+        'days'
+      );
+      const dateString = deliveryDate.format('dddd, MMMM D');
+
   cartSummaryHTML += `
   <div class="cart-item-container 
     js-cart-item-container-${matchingProduct.id}">
     <div class="delivery-date">
-      Delivery date: Tuesday, June 21
+      Delivery date: ${dateString}
     </div>
 
     <div class="cart-item-details-grid">
@@ -66,14 +85,14 @@ cart.forEach((cartItem) => {
         <div class="delivery-options-title">
           Choose a delivery option:
         </div>
-        ${deliveryOptionHTML(matchingProduct)}
+        ${deliveryOptionHTML(matchingProduct, cartItem)}
       </div>
     </div>
   </div>
   `;
 });
 
-function deliveryOptionHTML(matchingProduct) {
+function deliveryOptionHTML(matchingProduct, cartItem) {
   let html = '';
 
 
@@ -88,11 +107,12 @@ function deliveryOptionHTML(matchingProduct) {
       const priceString = deliveryOption.priceCents === 0
         ? 'FREE'
         : `$${formatCurrency(deliveryOption.priceCents)} -`;
-
+      
+       const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
       
       html += `
         <div class="delivery-option">
-            <input type="radio"
+            <input type="radio"  ${isChecked ? 'checked' : ''}
               class="delivery-option-input"
               name="delivery-option-${matchingProduct.id}">
             <div>
@@ -105,7 +125,8 @@ function deliveryOptionHTML(matchingProduct) {
             </div>
         </div> 
       `
-    }); 
+    });
+
     return html;
 }
 
