@@ -1,11 +1,11 @@
 // these are called as named exports
 import {cart, removeFromCart, updateDeliveryOption} from '../../products-data/cart.js';
-import {products} from '../../products-data/products.js';
+import {products, getProduct} from '../../products-data/products.js';
 import {formatCurrency} from '../utiles/money.js';
 import {hello} from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
 //the below line is a short cut for an  import statement and is called as "Default Export"
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
-import {deliveryOptions} from '../../products-data/deliveryOptions.js';
+import {deliveryOptions, getDeliveryOption} from '../../products-data/deliveryOptions.js';
 
 hello();
 
@@ -23,26 +23,12 @@ export function renderOrderSummary() {
         //console.log(cartItem);
         //console.log(productId);
 
-        let matchingProduct;
-
-        products.forEach((product) => {
-          if(product.id === productId) {
-            matchingProduct = product;
-          }
-        });
-
-        //console.log(matchingProduct);
+        const matchingProduct = getProduct(productId);
+       //console.log(matchingProduct);
 
         const deliveryOptionId = cartItem.deliveryOptionId;
 
-        let deliveryOption = 0;
-
-        deliveryOptions.forEach((option) => {
-          if(option.id === deliveryOptionId) {
-            deliveryOption = option;
-            deliveryOption;
-          }
-        });
+        const deliveryOption = getDeliveryOption(deliveryOptionId);
 
         const today = dayjs();
             const deliveryDate = today.add(
