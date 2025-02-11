@@ -6,13 +6,15 @@ import {hello} from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
 //the below line is a short cut for an  import statement and is called as "Default Export"
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import {deliveryOptions, getDeliveryOption} from '../../products-data/deliveryOptions.js';
+import {renderPaymentSummary} from './paymentSummary.js';
 
-hello();
+
+/*hello();
 
 
 const today = dayjs();
 const deliveryDate = today.add(7, 'days');
-console.log(deliveryDate.format('dddd, MMMM D'));
+console.log(deliveryDate.format('dddd, MMMM D')); */
 
 
 export function renderOrderSummary() {
@@ -135,6 +137,8 @@ export function renderOrderSummary() {
             const container = document.querySelector(`.js-cart-item-container-${productId}`);
             //console.log(container);
             container.remove();
+
+            renderPaymentSummary();
           });
       });
 
@@ -146,6 +150,8 @@ export function renderOrderSummary() {
             updateDeliveryOption(productId,deliveryOptionId);
 
             renderOrderSummary();
+            
+            renderPaymentSummary();
 
           });
       });
